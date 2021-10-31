@@ -1,6 +1,6 @@
 # Overview
 
-**[Agent Based Modelling Assessment 1 GitHub repository](https://link here/)**
+**[Agent Based Modelling Assessment 1 GitHub repository](https://https://github.com/kweird/githubintro/)**
 
 This is a collection of python and associated files that were written whilst taking the **[Programming for Geographical Information Analysis: Core Skills](https://www.geog.leeds.ac.uk/courses/computing/study/core-python/)** course, they show the iterations and improvements made to a python project designed to be an introduction to Agent Based Modelling.
 

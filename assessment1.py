@@ -60,13 +60,19 @@ cols = len(environment[0])
 
 
 # Make the agents. This is calling the Agent class in agentframework
-# We are passing the environment, rows and cols variables, so they need to be
-# created first
+# We are passing various variables so they need to be created first
 for i in range(num_of_agents):
-    #y = int(td_ys[i].text)
-    #x = int(td_xs[i].text)
-    #agents.append(agentframework.Agent(i, agents, environment, rows, cols, y, x))
-    agents.append(agentframework.Agent(i, agents, environment, rows, cols))
+    
+    # We set the y and x values from the data scraped from the webpage, if 
+    # we choose not to do this 
+    y = int(td_ys[i].text)
+    x = int(td_xs[i].text)
+    agents.append(agentframework.Agent(i, agents, environment, rows, cols, y, x))
+    
+    # This is the code to not pass y and x variables, so the agents will be 
+    # created in a random place
+    
+    #agents.append(agentframework.Agent(i, agents, environment, rows, cols))
     
 
 #Create variables for max and min distance between each agent
@@ -100,7 +106,9 @@ def run():
 fig = matplotlib.pyplot.figure(figsize=(7, 7))
 ax = fig.add_axes([0, 0, 1, 1])
 
-#This builds the main window ("root"); sets its title, then creates and lays out a matplotlib canvas embedded within our window and associated with fig, our matplotlib figure.
+# This builds the main window ("root"); sets its title, then creates and lays
+# out a matplotlib canvas embedded within our window and associated with fig,
+# our matplotlib figure.
 root = tkinter.Tk()
 root.wm_title("Model")
 canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=root)
@@ -156,6 +164,7 @@ def update(frame_number):
 def gen_function(b = [0]):
     a = 0
     global carry_on #Not actually needed as we're not assigning, but clearer
+    global agents # Used to access the agents list within this function
     while (a < num_of_iterations) & (carry_on) :
         yield a			# Returns control and waits next call.
         a = a + 1
@@ -163,6 +172,29 @@ def gen_function(b = [0]):
     else:
         print("Max iterations: ", num_of_iterations)
         print("Stopping condition encountered:\n" + "Completed " + str(a) + " iterations")
+        
+    #Print final agent states
+    print("Final agents")
+    #Use the sorted function to reorder the agents list, sorted on the attribute i
+    #This is to make the readout easier to read for humans, as the agents are 
+    #always in the same order, so we can easily compare how any changes have
+    #affected the outcome
+    agents = sorted(agents, key=lambda Agent: Agent.i)
+    for i in range(num_of_agents):
+        print(agents[i])
+
+    #Write sorted agent final states to output.txt
+    #Using with means the file is closed when the with statement is finished
+    with open("output.txt", "w") as f:
+        f.write("Final agent states\n")
+        for i in range(num_of_agents):
+            f.write(str(agents[i]))
+            f.write("\n")
+
+
+    end_time = time.time()
+    
+    print ("Time taken =", (end_time - start_time))
 
 
 #animation = matplotlib.animation.FuncAnimation(fig, update, interval=1, repeat=False, frames=10)
@@ -179,32 +211,13 @@ def gen_function(b = [0]):
 
 
 
-
-
-#Print final agent states
-print("Final agents")
-#Use the sorted function to reorder the agents list, sorted on the attribute i
-#This is to make the readout easier to read for humans, as the agents are 
-#always in the same order, so we can easily compare how any changes have
-#affected the outcome
-agents = sorted(agents, key=lambda Agent: Agent.i)
-for i in range(num_of_agents):
-    print(agents[i])
-
-#Write sorted agent final states to output.txt
-#Using with means the file is closed when the with statement is finished
-with open("output.txt", "w") as f:
-    for i in range(num_of_agents):
-        f.write(str(agents[i]))
-        f.write("\n")
-
-
-end_time = time.time()
-
-
-print ("Time taken =", (end_time - start_time))
-
 tkinter.mainloop()
+
+
+
+
+
+
 
 
 
